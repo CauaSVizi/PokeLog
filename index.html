@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PokeLog - Pokédex & Team Builder</title>
+  <title>PokeLog - Pokédex Master Ball Edition</title>
   
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23ef4444' stroke='%23000' stroke-width='8'/><path d='M 5,50 A 45,45 0 0,0 95,50 Z' fill='%23ffffff'/><line x1='5' y1='50' x2='95' y2='50' stroke='%23000' stroke-width='8'/><circle cx='50' cy='50' r='14' fill='%23ffffff' stroke='%23000' stroke-width='6'/><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237b2cbf' stroke='%23000' stroke-width='8'/><path d='M 5,50 A 45,45 0 0,0 95,50 Z' fill='%23ffffff'/><circle cx='30' cy='32' r='8' fill='%23f72585'/><circle cx='70' cy='32' r='8' fill='%23f72585'/><line x1='5' y1='50' x2='95' y2='50' stroke='%23000' stroke-width='8'/><circle cx='50' cy='50' r='14' fill='%23ffffff' stroke='%23000' stroke-width='6'/><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,18 +13,18 @@
 
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --bg-card: #151c2c;
-      --bg-card-hover: #1e293b;
-      --primary: #ff3e3e;
-      --primary-hover: #e03131;
-      --accent-yellow: #fcc419;
-      --accent-mega: #a855f7;
-      --accent-gmax: #f43f5e;
-      --accent-forms: #3b82f6;
+      /* PALETA MASTER BALL */
+      --mb-bg-dark: #0d0b18;
+      --mb-bg-card: #18132a;
+      --mb-bg-card-hover: #231b3d;
+      --mb-purple-main: #7b2cbf;
+      --mb-purple-light: #9d4edd;
+      --mb-magenta: #f72585;
+      --mb-magenta-hover: #d90429;
+      --mb-yellow: #ffb703;
       --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #2e384d;
+      --text-muted: #a0aec0;
+      --border-color: #322552;
       
       --type-normal: #A8A878;
       --type-fire: #F08030;
@@ -47,59 +47,77 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    body { background-color: var(--mb-bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
+    /* HEADER COM BANNER DE IMAGEM */
     header {
-      background: rgba(21, 28, 44, 0.85);
-      backdrop-filter: blur(12px);
-      position: sticky; top: 0; z-index: 100;
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 1.5rem;
+      position: relative;
+      background: linear-gradient(135deg, rgba(123, 44, 191, 0.85) 0%, rgba(13, 11, 24, 0.95) 100%),
+                  url('https://cdn.pfps.gg/banners/7873-pokemon.png') center/cover no-repeat;
+      border-bottom: 2px solid var(--mb-magenta);
+      padding: 2rem 1.5rem;
+      box-shadow: 0 4px 25px rgba(123, 44, 191, 0.3);
     }
 
     .header-container {
       max-width: 1300px; margin: 0 auto;
-      display: flex; flex-direction: column; gap: 1rem;
+      display: flex; flex-direction: column; gap: 1.2rem;
     }
     @media (min-width: 768px) {
       .header-container { flex-direction: row; align-items: center; justify-content: space-between; }
     }
 
     .logo {
-      display: flex; align-items: center; gap: 0.75rem;
-      font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none;
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 1.8rem; font-weight: 800; color: var(--text-main); text-decoration: none;
+      text-shadow: 0 2px 8px rgba(247, 37, 133, 0.5);
     }
-    .logo i { color: var(--primary); font-size: 1.8rem; animation: spin 10s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+    
+    /* ÍCONE MASTER BALL CUSTOMIZADO EM SVG */
+    .masterball-icon {
+      width: 42px; height: 42px;
+      filter: drop-shadow(0 0 8px var(--mb-magenta));
+      animation: pulse 3s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
 
     .nav-tabs {
       display: flex; gap: 0.5rem;
-      background-color: rgba(0, 0, 0, 0.2); padding: 0.25rem;
-      border-radius: 12px; border: 1px solid var(--border-color);
+      background: rgba(13, 11, 24, 0.7); padding: 0.35rem;
+      border-radius: 14px; border: 1px solid var(--border-color);
+      backdrop-filter: blur(8px);
     }
     .nav-btn {
       background: transparent; border: none; color: var(--text-muted);
-      padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem;
-      cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1.1rem; border-radius: 10px; font-weight: 700; font-size: 0.875rem;
+      cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 0.5rem;
     }
-    .nav-btn.active, .nav-btn:hover { color: var(--text-main); background-color: var(--bg-card-hover); }
-    .nav-btn .badge { background: var(--primary); color: white; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 20px; }
+    .nav-btn.active, .nav-btn:hover { 
+      color: #fff; 
+      background: linear-gradient(135deg, var(--mb-purple-main), var(--mb-magenta));
+      box-shadow: 0 2px 10px rgba(247, 37, 133, 0.4);
+    }
+    .nav-btn .badge { background: var(--mb-yellow); color: #000; font-size: 0.75rem; font-weight: 800; padding: 0.1rem 0.5rem; border-radius: 20px; }
 
     .controls-bar {
       max-width: 1300px; width: 100%; margin: 1.5rem auto 0; padding: 0 1.5rem;
       display: flex; flex-wrap: wrap; gap: 1rem;
     }
     .search-box { flex: 1; min-width: 250px; position: relative; }
-    .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--mb-purple-light); }
     .search-box input {
-      width: 100%; background-color: var(--bg-card); border: 1px solid var(--border-color);
+      width: 100%; background-color: var(--mb-bg-card); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.75rem 1rem 0.75rem 2.75rem; border-radius: 12px; outline: none;
+      transition: border 0.2s;
     }
-    .search-box input:focus { border-color: var(--primary); }
+    .search-box input:focus { border-color: var(--mb-magenta); box-shadow: 0 0 10px rgba(247, 37, 133, 0.2); }
 
     .filter-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
     select {
-      background-color: var(--bg-card); border: 1px solid var(--border-color);
+      background-color: var(--mb-bg-card); border: 1px solid var(--border-color);
       color: var(--text-main); padding: 0.75rem 1rem; border-radius: 12px; outline: none; cursor: pointer;
     }
 
@@ -107,79 +125,83 @@
     .pokemon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
 
     .poke-card {
-      background-color: var(--bg-card); border: 1px solid var(--border-color);
-      border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; align-items: center;
-      position: relative; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+      background-color: var(--mb-bg-card); border: 1px solid var(--border-color);
+      border-radius: 18px; padding: 1rem; display: flex; flex-direction: column; align-items: center;
+      position: relative; cursor: pointer; transition: all 0.25s ease;
     }
-    .poke-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: rgba(255, 255, 255, 0.2); }
+    .poke-card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 10px 25px rgba(123, 44, 191, 0.35); 
+      border-color: var(--mb-purple-light); 
+    }
 
     .card-actions { position: absolute; top: 0.75rem; width: calc(100% - 1.5rem); display: flex; justify-content: space-between; align-items: center; z-index: 2; }
-    .poke-id { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .poke-id { font-size: 0.75rem; font-weight: 800; color: var(--mb-purple-light); }
     .btn-icon { background: rgba(0, 0, 0, 0.4); border: none; color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .btn-icon:hover { background: rgba(255, 255, 255, 0.2); color: var(--text-main); }
-    .btn-icon.active { color: var(--primary); }
+    .btn-icon.active { color: var(--mb-magenta); }
 
     .poke-img-container { width: 120px; height: 120px; margin: 1rem 0 0.5rem; display: flex; align-items: center; justify-content: center; }
-    .poke-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+    .poke-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); }
     .poke-name { font-size: 1.1rem; font-weight: 700; text-transform: capitalize; margin-bottom: 0.5rem; }
     .types-list { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
     .type-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 6px; color: white; }
 
     .btn-add-team {
-      width: 100%; background-color: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
-      color: var(--text-main); padding: 0.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;
+      width: 100%; background: rgba(123, 44, 191, 0.15); border: 1px solid var(--mb-purple-main);
+      color: var(--text-main); padding: 0.55rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s;
     }
-    .btn-add-team:hover { background-color: var(--primary); border-color: var(--primary); }
-    .btn-add-team.in-team { background-color: #22c55e; border-color: #22c55e; }
+    .btn-add-team:hover { background: var(--mb-purple-main); border-color: var(--mb-purple-light); }
+    .btn-add-team.in-team { background: var(--mb-magenta); border-color: var(--mb-magenta); }
 
     /* MODAL DETALHES */
     .modal-overlay {
-      position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px);
+      position: fixed; inset: 0; background-color: rgba(5, 3, 10, 0.85); backdrop-filter: blur(8px);
       z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem;
       opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
     .modal-content {
-      background-color: var(--bg-card); border: 1px solid var(--border-color);
-      width: 100%; max-width: 620px; max-height: 90vh; border-radius: 20px; overflow-y: auto; position: relative;
+      background-color: var(--mb-bg-card); border: 2px solid var(--mb-purple-main);
+      width: 100%; max-width: 620px; max-height: 90vh; border-radius: 24px; overflow-y: auto; position: relative;
+      box-shadow: 0 0 35px rgba(123, 44, 191, 0.4);
     }
     .close-btn { position: absolute; top: 1rem; right: 1rem; z-index: 10; background: rgba(0,0,0,0.5); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
 
     .modal-header-bg {
-      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%);
+      background: linear-gradient(180deg, rgba(123, 44, 191, 0.3) 0%, rgba(24, 19, 42, 0) 100%);
       padding: 2.5rem 1rem 1rem 1rem; display: flex; flex-direction: column; align-items: center;
     }
     .modal-img-wrapper { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; }
-    .modal-img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5)); }
+    .modal-img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6)); }
 
     .modal-toggle-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; justify-content: center; align-items: center; }
     
-    /* SELETOR DE FORMAS DA MODAL */
     .forms-select {
-      background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent-forms); color: #60a5fa;
-      padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; outline: none; cursor: pointer;
+      background: rgba(247, 37, 133, 0.2); border: 1px solid var(--mb-magenta); color: #fff;
+      padding: 0.35rem 0.7rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; outline: none; cursor: pointer;
     }
 
     .shiny-toggle, .mega-toggle, .gmax-toggle {
       background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);
-      color: var(--accent-yellow); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+      color: var(--mb-yellow); padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
       display: flex; align-items: center; gap: 0.4rem;
     }
-    .mega-toggle { color: var(--accent-mega); }
-    .mega-toggle.active { background: var(--accent-mega); color: #fff; }
-    .gmax-toggle { color: var(--accent-gmax); }
-    .gmax-toggle.active { background: var(--accent-gmax); color: #fff; }
+    .mega-toggle { color: #a855f7; }
+    .mega-toggle.active { background: #a855f7; color: #fff; }
+    .gmax-toggle { color: #f43f5e; }
+    .gmax-toggle.active { background: #f43f5e; color: #fff; }
 
     .modal-body { padding: 1.5rem; }
     .modal-title-area { text-align: center; margin-bottom: 1.5rem; }
     .modal-title-area h2 { font-size: 1.8rem; text-transform: capitalize; }
 
-    .pills-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; text-align: center; margin-bottom: 1.5rem; }
+    .pills-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 14px; text-align: center; margin-bottom: 1.5rem; border: 1px solid var(--border-color); }
     .pill-item span { display: block; font-size: 0.75rem; color: var(--text-muted); }
     .pill-item strong { font-size: 1rem; }
 
     .stats-section, .section-box { margin-bottom: 1.5rem; }
-    .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--mb-purple-light); margin-bottom: 0.75rem; }
 
     .stat-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.85rem; }
     .stat-name { width: 70px; font-weight: 600; }
@@ -191,7 +213,7 @@
     .game-badge, .ability-badge { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; text-transform: capitalize; }
 
     /* CADEIA EVOLUTIVA */
-    .evo-chain { display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 12px; overflow-x: auto; min-height: 120px; }
+    .evo-chain { display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 12px; overflow-x: auto; min-height: 120px; border: 1px solid var(--border-color); }
     .evo-node-container { display: flex; align-items: center; gap: 0.5rem; }
     .evo-branches { display: flex; flex-direction: column; gap: 1rem; }
     .evo-branch-item { display: flex; align-items: center; gap: 0.5rem; }
@@ -200,19 +222,19 @@
     .evo-item img { width: 55px; height: 55px; object-fit: contain; }
     .evo-item span { font-size: 0.75rem; text-transform: capitalize; margin-top: 0.2rem; font-weight: 600; text-align: center; }
     .evo-connector { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; padding: 0 0.3rem; min-width: 60px; }
-    .evo-details { font-size: 0.65rem; font-weight: 700; color: var(--accent-yellow); text-align: center; text-transform: capitalize; max-width: 80px; }
+    .evo-details { font-size: 0.65rem; font-weight: 700; color: var(--mb-yellow); text-align: center; text-transform: capitalize; max-width: 80px; }
     .evo-arrow { color: var(--text-muted); font-size: 0.8rem; }
 
     /* TIME */
-    .team-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; }
+    .team-section { background-color: var(--mb-bg-card); border: 1px solid var(--border-color); border-radius: 18px; padding: 1.5rem; margin-bottom: 2rem; }
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .team-slot { background: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-    .team-slot.filled { border-style: solid; border-color: var(--primary); }
+    .team-slot { background: rgba(0,0,0,0.3); border: 2px dashed var(--border-color); border-radius: 14px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+    .team-slot.filled { border-style: solid; border-color: var(--mb-magenta); }
     .team-slot img { width: 70px; height: 70px; }
-    .btn-remove-team { position: absolute; top: 4px; right: 4px; background: var(--primary); color: white; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; }
+    .btn-remove-team { position: absolute; top: 4px; right: 4px; background: var(--mb-magenta); color: white; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; }
 
     .loader { text-align: center; padding: 3rem; font-size: 1.2rem; color: var(--text-muted); }
-    .loader i { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .loader i { font-size: 2rem; color: var(--mb-purple-light); margin-bottom: 0.5rem; }
 
     /* CORES DOS TIPOS */
     .bg-normal { background-color: var(--type-normal); }
@@ -240,7 +262,16 @@
   <header>
     <div class="header-container">
       <a href="#" class="logo" onclick="switchTab('all')">
-        <i class="fa-solid fa-compact-disc"></i>
+        <!-- SVG MASTER BALL -->
+        <svg class="masterball-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#7b2cbf" stroke="#000" stroke-width="8"/>
+          <path d="M 5,50 A 45,45 0 0,0 95,50 Z" fill="#ffffff"/>
+          <circle cx="28" cy="30" r="8" fill="#f72585"/>
+          <circle cx="72" cy="30" r="8" fill="#f72585"/>
+          <line x1="5" y1="50" x2="95" y2="50" stroke="#000" stroke-width="8"/>
+          <circle cx="50" cy="50" r="14" fill="#ffffff" stroke="#000" stroke-width="6"/>
+          <circle cx="50" cy="50" r="6" fill="#000"/>
+        </svg>
         <span>PokeLog</span>
       </a>
 
@@ -364,7 +395,7 @@
           </div>
           <div class="pill-item">
             <span>BST TOTAL</span>
-            <strong id="modal-bst" style="color: var(--accent-yellow);">0</strong>
+            <strong id="modal-bst" style="color: var(--mb-yellow);">0</strong>
           </div>
         </div>
 
@@ -674,7 +705,6 @@
         const specRes = await fetch(poke.species.url);
         const specData = await specRes.json();
         
-        // Filtra Megas, Gmax e Outras Formas (Alola, Galar, Hisui, Paldea, Lycanroc Dusk/Midnight, etc.)
         megaVarieties = specData.varieties.filter(v => v.pokemon.name.includes('-mega'));
         gmaxVariety = specData.varieties.find(v => v.pokemon.name.includes('-gmax'));
         
@@ -683,7 +713,6 @@
           !v.pokemon.name.includes('-gmax')
         );
 
-        // Se houver mais de 1 forma alternativa / regional (ex: Lycanroc, Alola, etc.)
         if (altVarieties.length > 1) {
           formsSelect.style.display = 'inline-block';
           altVarieties.forEach(v => {
@@ -694,7 +723,6 @@
           });
         }
 
-        // Configura botão Mega
         if (megaVarieties.length > 0) {
           document.getElementById('mega-toggle').style.display = 'flex';
           document.getElementById('mega-toggle-text').innerText = 'Mega';
@@ -703,7 +731,6 @@
           document.getElementById('mega-toggle').style.display = 'none';
         }
 
-        // Configura botão G-Max
         if (gmaxVariety) {
           document.getElementById('gmax-toggle').style.display = 'flex';
           document.getElementById('gmax-toggle').classList.remove('active');
@@ -720,7 +747,6 @@
       loadEvolutions(poke.id);
     }
 
-    // Formata o nome da variante para exibição limpa no menu dropdown
     function formatFormName(fullFormName, baseName) {
       if (fullFormName === baseName) return 'Forma Padrão';
       let formSuffix = fullFormName.replace(`${baseName}-`, '');
@@ -735,7 +761,6 @@
       return formLabels[formSuffix] || formSuffix.replace('-', ' ');
     }
 
-    // Alterna a forma ativa selecionada na modal
     async function changeForm(pokemonName) {
       activePokemonData = await getPokemonDetails(pokemonName);
       renderModalData();
@@ -761,7 +786,7 @@
       poke.stats.forEach(s => {
         totalBst += s.base_stat;
         const perc = Math.min(100, (s.base_stat / 180) * 100);
-        let color = s.base_stat >= 90 ? '#22c55e' : (s.base_stat >= 60 ? '#eab308' : '#ef4444');
+        let color = s.base_stat >= 90 ? '#f72585' : (s.base_stat >= 60 ? '#9d4edd' : '#322552');
 
         statsContainer.innerHTML += `
           <div class="stat-row">
@@ -829,8 +854,8 @@
       isShinyActive = !isShinyActive;
       updateModalImage();
       const btn = document.getElementById('shiny-toggle');
-      btn.style.background = isShinyActive ? 'var(--accent-yellow)' : 'rgba(255, 255, 255, 0.1)';
-      btn.style.color = isShinyActive ? '#000' : 'var(--accent-yellow)';
+      btn.style.background = isShinyActive ? 'var(--mb-yellow)' : 'rgba(255, 255, 255, 0.1)';
+      btn.style.color = isShinyActive ? '#000' : 'var(--mb-yellow)';
     }
 
     function updateModalImage() {
