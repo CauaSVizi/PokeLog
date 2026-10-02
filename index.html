@@ -547,6 +547,7 @@
       text-transform: capitalize;
     }
 
+    /* ESTILOS DA CADEIA EVOLUTIVA COM CONDIÇÕES */
     .evo-chain {
       display: flex;
       align-items: center;
@@ -555,6 +556,7 @@
       background: rgba(0,0,0,0.2);
       padding: 1rem;
       border-radius: 12px;
+      overflow-x: auto;
     }
 
     .evo-item {
@@ -562,17 +564,43 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
+      min-width: 60px;
     }
 
     .evo-item img {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
     }
 
     .evo-item span {
       font-size: 0.75rem;
       text-transform: capitalize;
       margin-top: 0.2rem;
+      font-weight: 600;
+    }
+
+    .evo-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      min-width: 50px;
+    }
+
+    .evo-details {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent-yellow);
+      text-align: center;
+      text-transform: capitalize;
+      white-space: nowrap;
+    }
+
+    .evo-arrow {
+      color: var(--text-muted);
+      font-size: 0.8rem;
     }
 
     /* TEAM DRAWER */
@@ -1262,6 +1290,23 @@
       document.getElementById('modal-img').src = imgUrl;
     }
 
+    // Função que extrai o texto amigável do motivo de evolução
+    function getEvoTriggerText(details) {
+      if (!details || details.length === 0) return '';
+      const evo = details[0];
+
+      if (evo.min_level) return `Nv. ${evo.min_level}`;
+      if (evo.item) return evo.item.name.replace('-', ' ');
+      if (evo.trigger && evo.trigger.name === 'trade') {
+        return evo.held_item ? `Troca com ${evo.held_item.name.replace('-', ' ')}` : 'Troca';
+      }
+      if (evo.min_happiness) return 'Amizade';
+      if (evo.known_move) return evo.known_move.name.replace('-', ' ');
+      if (evo.location) return evo.location.name.replace('-', ' ');
+
+      return evo.trigger ? evo.trigger.name.replace('-', ' ') : '';
+    }
+
     async function loadEvolutions(id) {
       const evoContainer = document.getElementById('modal-evolution');
       evoContainer.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Carregando evoluções...</span>';
@@ -1289,8 +1334,16 @@
           `;
 
           if (chain.evolves_to.length > 0) {
-            evoContainer.innerHTML += `<i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:0.8rem;"></i>`;
-            chain = chain.evolves_to[0];
+            const nextEvo = chain.evolves_to[0];
+            const triggerText = getEvoTriggerText(nextEvo.evolution_details);
+
+            evoContainer.innerHTML += `
+              <div class="evo-connector">
+                <span class="evo-details">${triggerText}</span>
+                <i class="fa-solid fa-chevron-right evo-arrow"></i>
+              </div>
+            `;
+            chain = nextEvo;
           } else {
             chain = null;
           }
