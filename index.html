@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PokeLog - Pokédex & Team Builder</title>
   
-  <!-- Favicon da Pokébola -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23ef4444' stroke='%23000' stroke-width='8'/><path d='M 5,50 A 45,45 0 0,0 95,50 Z' fill='%23ffffff'/><line x1='5' y1='50' x2='95' y2='50' stroke='%23000' stroke-width='8'/><circle cx='50' cy='50' r='14' fill='%23ffffff' stroke='%23000' stroke-width='6'/><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
-  
-  <!-- Fontes e Ícones -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,6 +21,7 @@
       --accent-yellow: #fcc419;
       --accent-mega: #a855f7;
       --accent-gmax: #f43f5e;
+      --accent-forms: #3b82f6;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border-color: #2e384d;
@@ -48,655 +46,173 @@
       --type-fairy: #EE99AC;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* HEADER */
     header {
       background: rgba(21, 28, 44, 0.85);
       backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       border-bottom: 1px solid var(--border-color);
       padding: 1rem 1.5rem;
     }
 
     .header-container {
-      max-width: 1300px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      max-width: 1300px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 1rem;
     }
-
     @media (min-width: 768px) {
-      .header-container {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-      }
+      .header-container { flex-direction: row; align-items: center; justify-content: space-between; }
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--text-main);
-      text-decoration: none;
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none;
     }
-
-    .logo i {
-      color: var(--primary);
-      font-size: 1.8rem;
-      animation: spin 10s linear infinite;
-    }
-
+    .logo i { color: var(--primary); font-size: 1.8rem; animation: spin 10s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     .nav-tabs {
-      display: flex;
-      gap: 0.5rem;
-      background-color: rgba(0, 0, 0, 0.2);
-      padding: 0.25rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
+      display: flex; gap: 0.5rem;
+      background-color: rgba(0, 0, 0, 0.2); padding: 0.25rem;
+      border-radius: 12px; border: 1px solid var(--border-color);
     }
-
     .nav-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      background: transparent; border: none; color: var(--text-muted);
+      padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem;
+      cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 0.5rem;
     }
+    .nav-btn.active, .nav-btn:hover { color: var(--text-main); background-color: var(--bg-card-hover); }
+    .nav-btn .badge { background: var(--primary); color: white; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 20px; }
 
-    .nav-btn.active, .nav-btn:hover {
-      color: var(--text-main);
-      background-color: var(--bg-card-hover);
-    }
-
-    .nav-btn .badge {
-      background: var(--primary);
-      color: white;
-      font-size: 0.75rem;
-      padding: 0.1rem 0.4rem;
-      border-radius: 20px;
-    }
-
-    /* CONTROLS (SEARCH & FILTERS) */
     .controls-bar {
-      max-width: 1300px;
-      width: 100%;
-      margin: 1.5rem auto 0;
-      padding: 0 1.5rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
+      max-width: 1300px; width: 100%; margin: 1.5rem auto 0; padding: 0 1.5rem;
+      display: flex; flex-wrap: wrap; gap: 1rem;
     }
-
-    .search-box {
-      flex: 1;
-      min-width: 250px;
-      position: relative;
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-
+    .search-box { flex: 1; min-width: 250px; position: relative; }
+    .search-box i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
     .search-box input {
-      width: 100%;
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.75rem 1rem 0.75rem 2.75rem;
-      border-radius: 12px;
-      outline: none;
-      font-size: 0.95rem;
-      transition: border-color 0.2s;
+      width: 100%; background-color: var(--bg-card); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.75rem 1rem 0.75rem 2.75rem; border-radius: 12px; outline: none;
     }
+    .search-box input:focus { border-color: var(--primary); }
 
-    .search-box input:focus {
-      border-color: var(--primary);
-    }
-
-    .filter-group {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
+    .filter-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
     select {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.75rem 1rem;
-      border-radius: 12px;
-      outline: none;
-      cursor: pointer;
-      font-size: 0.9rem;
+      background-color: var(--bg-card); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.75rem 1rem; border-radius: 12px; outline: none; cursor: pointer;
     }
 
-    /* MAIN CONTAINER & GRID */
-    main {
-      max-width: 1300px;
-      width: 100%;
-      margin: 1.5rem auto;
-      padding: 0 1.5rem;
-      flex: 1;
-    }
-
-    .pokemon-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
+    main { max-width: 1300px; width: 100%; margin: 1.5rem auto; padding: 0 1.5rem; flex: 1; }
+    .pokemon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
 
     .poke-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      background-color: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 16px; padding: 1rem; display: flex; flex-direction: column; align-items: center;
+      position: relative; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
     }
+    .poke-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: rgba(255, 255, 255, 0.2); }
 
-    .poke-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
+    .card-actions { position: absolute; top: 0.75rem; width: calc(100% - 1.5rem); display: flex; justify-content: space-between; align-items: center; z-index: 2; }
+    .poke-id { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .btn-icon { background: rgba(0, 0, 0, 0.4); border: none; color: var(--text-muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .btn-icon:hover { background: rgba(255, 255, 255, 0.2); color: var(--text-main); }
+    .btn-icon.active { color: var(--primary); }
 
-    .card-actions {
-      position: absolute;
-      top: 0.75rem;
-      width: calc(100% - 1.5rem);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 2;
-    }
-
-    .poke-id {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .btn-icon {
-      background: rgba(0, 0, 0, 0.4);
-      border: none;
-      color: var(--text-muted);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .btn-icon:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: var(--text-main);
-    }
-
-    .btn-icon.active {
-      color: var(--primary);
-    }
-
-    .poke-img-container {
-      width: 120px;
-      height: 120px;
-      margin: 1rem 0 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .poke-img-container img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-    }
-
-    .poke-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-transform: capitalize;
-      margin-bottom: 0.5rem;
-    }
-
-    .types-list {
-      display: flex;
-      gap: 0.4rem;
-      margin-bottom: 1rem;
-    }
-
-    .type-badge {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      color: white;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    }
+    .poke-img-container { width: 120px; height: 120px; margin: 1rem 0 0.5rem; display: flex; align-items: center; justify-content: center; }
+    .poke-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+    .poke-name { font-size: 1.1rem; font-weight: 700; text-transform: capitalize; margin-bottom: 0.5rem; }
+    .types-list { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
+    .type-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 6px; color: white; }
 
     .btn-add-team {
-      width: 100%;
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 0.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
+      width: 100%; background-color: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
+      color: var(--text-main); padding: 0.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;
     }
+    .btn-add-team:hover { background-color: var(--primary); border-color: var(--primary); }
+    .btn-add-team.in-team { background-color: #22c55e; border-color: #22c55e; }
 
-    .btn-add-team:hover {
-      background-color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .btn-add-team.in-team {
-      background-color: #22c55e;
-      border-color: #22c55e;
-    }
-
-    /* MODAL DE DETALHES */
+    /* MODAL DETALHES */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(5px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
+      position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px);
+      z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
-
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
     .modal-content {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      width: 100%;
-      max-width: 600px;
-      max-height: 90vh;
-      border-radius: 20px;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      background-color: var(--bg-card); border: 1px solid var(--border-color);
+      width: 100%; max-width: 620px; max-height: 90vh; border-radius: 20px; overflow-y: auto; position: relative;
     }
-
-    .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      z-index: 10;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+    .close-btn { position: absolute; top: 1rem; right: 1rem; z-index: 10; background: rgba(0,0,0,0.5); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; }
 
     .modal-header-bg {
       background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%);
-      padding: 2.5rem 1rem 1rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
+      padding: 2.5rem 1rem 1rem 1rem; display: flex; flex-direction: column; align-items: center;
     }
+    .modal-img-wrapper { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; }
+    .modal-img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5)); }
 
-    .modal-img-wrapper {
-      width: 100%;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .modal-img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
-      transition: transform 0.3s ease;
-    }
-
-    .modal-toggle-buttons {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
-      flex-wrap: wrap;
-      justify-content: center;
+    .modal-toggle-buttons { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; justify-content: center; align-items: center; }
+    
+    /* SELETOR DE FORMAS DA MODAL */
+    .forms-select {
+      background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent-forms); color: #60a5fa;
+      padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; outline: none; cursor: pointer;
     }
 
     .shiny-toggle, .mega-toggle, .gmax-toggle {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border-color);
-      color: var(--accent-yellow);
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);
+      color: var(--accent-yellow); padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 0.4rem;
     }
+    .mega-toggle { color: var(--accent-mega); }
+    .mega-toggle.active { background: var(--accent-mega); color: #fff; }
+    .gmax-toggle { color: var(--accent-gmax); }
+    .gmax-toggle.active { background: var(--accent-gmax); color: #fff; }
 
-    .mega-toggle {
-      color: var(--accent-mega);
-    }
+    .modal-body { padding: 1.5rem; }
+    .modal-title-area { text-align: center; margin-bottom: 1.5rem; }
+    .modal-title-area h2 { font-size: 1.8rem; text-transform: capitalize; }
 
-    .mega-toggle.active {
-      background: var(--accent-mega);
-      color: #fff;
-    }
+    .pills-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; text-align: center; margin-bottom: 1.5rem; }
+    .pill-item span { display: block; font-size: 0.75rem; color: var(--text-muted); }
+    .pill-item strong { font-size: 1rem; }
 
-    .gmax-toggle {
-      color: var(--accent-gmax);
-    }
+    .stats-section, .section-box { margin-bottom: 1.5rem; }
+    .section-title { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
 
-    .gmax-toggle.active {
-      background: var(--accent-gmax);
-      color: #fff;
-    }
+    .stat-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.85rem; }
+    .stat-name { width: 70px; font-weight: 600; }
+    .stat-val { width: 35px; text-align: right; font-weight: 700; }
+    .stat-bar-bg { flex: 1; height: 8px; background-color: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 4px; }
 
-    .modal-body {
-      padding: 1.5rem;
-    }
+    .games-list, .abilities-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .game-badge, .ability-badge { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; text-transform: capitalize; }
 
-    .modal-title-area {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
+    /* CADEIA EVOLUTIVA */
+    .evo-chain { display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 12px; overflow-x: auto; min-height: 120px; }
+    .evo-node-container { display: flex; align-items: center; gap: 0.5rem; }
+    .evo-branches { display: flex; flex-direction: column; gap: 1rem; }
+    .evo-branch-item { display: flex; align-items: center; gap: 0.5rem; }
+    .evo-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; min-width: 65px; padding: 0.4rem; border-radius: 8px; }
+    .evo-item:hover { background: rgba(255, 255, 255, 0.05); }
+    .evo-item img { width: 55px; height: 55px; object-fit: contain; }
+    .evo-item span { font-size: 0.75rem; text-transform: capitalize; margin-top: 0.2rem; font-weight: 600; text-align: center; }
+    .evo-connector { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; padding: 0 0.3rem; min-width: 60px; }
+    .evo-details { font-size: 0.65rem; font-weight: 700; color: var(--accent-yellow); text-align: center; text-transform: capitalize; max-width: 80px; }
+    .evo-arrow { color: var(--text-muted); font-size: 0.8rem; }
 
-    .modal-title-area h2 {
-      font-size: 1.8rem;
-      text-transform: capitalize;
-    }
+    /* TIME */
+    .team-section { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .team-slot { background: rgba(0,0,0,0.2); border: 2px dashed var(--border-color); border-radius: 12px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+    .team-slot.filled { border-style: solid; border-color: var(--primary); }
+    .team-slot img { width: 70px; height: 70px; }
+    .btn-remove-team { position: absolute; top: 4px; right: 4px; background: var(--primary); color: white; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; }
 
-    .pills-info {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.5rem;
-      background: rgba(0,0,0,0.2);
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .pill-item span {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-    .pill-item strong {
-      font-size: 1rem;
-    }
-
-    .stats-section, .section-box {
-      margin-bottom: 1.5rem;
-    }
-
-    .section-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-    }
-
-    .stat-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-    }
-
-    .stat-name {
-      width: 70px;
-      font-weight: 600;
-    }
-
-    .stat-val {
-      width: 35px;
-      text-align: right;
-      font-weight: 700;
-    }
-
-    .stat-bar-bg {
-      flex: 1;
-      height: 8px;
-      background-color: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .stat-bar-fill {
-      height: 100%;
-      border-radius: 4px;
-    }
-
-    .games-list, .abilities-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
-    .game-badge, .ability-badge {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-color);
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      text-transform: capitalize;
-    }
-
-    /* ESTILOS DA CADEIA EVOLUTIVA REFORMULADA (SUPORTE A MULTI-RAMIFICAÇÕES) */
-    .evo-chain {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.2);
-      padding: 1.2rem;
-      border-radius: 12px;
-      overflow-x: auto;
-      min-height: 120px;
-    }
-
-    .evo-node-container {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .evo-branches {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .evo-branch-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .evo-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      min-width: 65px;
-      padding: 0.4rem;
-      border-radius: 8px;
-      transition: background 0.2s;
-    }
-
-    .evo-item:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .evo-item img {
-      width: 55px;
-      height: 55px;
-      object-fit: contain;
-    }
-
-    .evo-item span {
-      font-size: 0.75rem;
-      text-transform: capitalize;
-      margin-top: 0.2rem;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    .evo-connector {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.2rem;
-      padding: 0 0.3rem;
-      min-width: 60px;
-    }
-
-    .evo-details {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--accent-yellow);
-      text-align: center;
-      text-transform: capitalize;
-      white-space: normal;
-      line-height: 1.1;
-      max-width: 80px;
-    }
-
-    .evo-arrow {
-      color: var(--text-muted);
-      font-size: 0.8rem;
-    }
-
-    /* TEAM DRAWER */
-    .team-section {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .team-slot {
-      background: rgba(0,0,0,0.2);
-      border: 2px dashed var(--border-color);
-      border-radius: 12px;
-      height: 150px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .team-slot.filled {
-      border-style: solid;
-      border-color: var(--primary);
-    }
-
-    .team-slot img {
-      width: 70px;
-      height: 70px;
-    }
-
-    .btn-remove-team {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 0.7rem;
-    }
-
-    /* LOADER */
-    .loader {
-      text-align: center;
-      padding: 3rem;
-      font-size: 1.2rem;
-      color: var(--text-muted);
-    }
-
-    .loader i {
-      font-size: 2rem;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
+    .loader { text-align: center; padding: 3rem; font-size: 1.2rem; color: var(--text-muted); }
+    .loader i { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
 
     /* CORES DOS TIPOS */
     .bg-normal { background-color: var(--type-normal); }
@@ -721,7 +237,6 @@
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="header-container">
       <a href="#" class="logo" onclick="switchTab('all')">
@@ -743,7 +258,6 @@
     </div>
   </header>
 
-  <!-- FILTROS -->
   <div class="controls-bar" id="controls-bar">
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
@@ -790,12 +304,10 @@
     </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
   <main>
     <div id="team-view" style="display: none;" class="team-section">
       <h2><i class="fa-solid fa-shield-halved"></i> Seu Time Pokémon</h2>
       <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Monte sua equipe de batalha ideal (Até 6 Pokémons)</p>
-      
       <div class="team-grid" id="team-grid"></div>
     </div>
 
@@ -807,7 +319,6 @@
     </div>
   </main>
 
-  <!-- MODAL DE DETALHES -->
   <div class="modal-overlay" id="poke-modal">
     <div class="modal-content">
       <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -816,15 +327,21 @@
         <div class="modal-img-wrapper">
           <img src="" id="modal-img" class="modal-img" alt="Pokemon">
         </div>
+
         <div class="modal-toggle-buttons">
+          <select id="forms-select" class="forms-select" style="display: none;" onchange="changeForm(this.value)">
+          </select>
+
           <button class="shiny-toggle" id="shiny-toggle" onclick="toggleShiny()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> Ver Shiny
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Shiny
           </button>
+          
           <button class="mega-toggle" id="mega-toggle" style="display: none;" onclick="toggleMega()">
-            <i class="fa-solid fa-bolt"></i> <span id="mega-toggle-text">Mega Evolução</span>
+            <i class="fa-solid fa-bolt"></i> <span id="mega-toggle-text">Mega</span>
           </button>
+          
           <button class="gmax-toggle" id="gmax-toggle" style="display: none;" onclick="toggleGmax()">
-            <i class="fa-solid fa-cloud"></i> <span id="gmax-toggle-text">Gigantamax</span>
+            <i class="fa-solid fa-cloud"></i> <span id="gmax-toggle-text">G-Max</span>
           </button>
         </div>
       </div>
@@ -878,20 +395,8 @@
     const MAX_POKEMON = 1025;
     const PAGE_SIZE = 40;
     
-    // IDs Pokémons com Mega Evolução
-    const MEGA_POKEMON_IDS = [
-      3, 6, 9, 15, 18, 65, 80, 94, 115, 127, 130, 142, 150, 
-      181, 208, 212, 214, 229, 248, 254, 257, 260, 282, 302, 
-      303, 306, 308, 319, 323, 334, 354, 359, 362, 373, 376, 
-      380, 381, 384, 428, 445, 448, 460, 475, 531, 719
-    ];
-
-    // IDs Pokémons com Gigantamax
-    const GMAX_POKEMON_IDS = [
-      3, 6, 9, 12, 25, 52, 68, 99, 131, 133, 143, 
-      569, 809, 812, 815, 818, 823, 826, 834, 839, 
-      841, 842, 844, 849, 851, 858, 861, 869, 879, 884, 892
-    ];
+    const MEGA_POKEMON_IDS = [3, 6, 9, 15, 18, 65, 80, 94, 115, 127, 130, 142, 150, 181, 208, 212, 214, 229, 248, 254, 257, 260, 282, 302, 303, 306, 308, 319, 323, 334, 354, 359, 362, 373, 376, 380, 381, 384, 428, 445, 448, 460, 475, 531, 719];
+    const GMAX_POKEMON_IDS = [3, 6, 9, 12, 25, 52, 68, 99, 131, 133, 143, 569, 809, 812, 815, 818, 823, 826, 834, 839, 841, 842, 844, 849, 851, 858, 861, 869, 879, 884, 892];
     
     let allPokemonList = [];
     let loadedPokemonData = [];
@@ -905,12 +410,11 @@
     let activePokemonData = null;
     let basePokemonData = null;
     
+    let altVarieties = [];
     let megaVarieties = [];
     let currentMegaIndex = -1;
-    
     let gmaxVariety = null;
     let isGmaxActive = false;
-
     let isShinyActive = false;
 
     const GEN_RANGES = {
@@ -993,7 +497,6 @@
         list = list.filter(p => GMAX_POKEMON_IDS.includes(p.id));
       } else if (typeFilter) {
         if (!window.typeCache) window.typeCache = {};
-        
         if (!window.typeCache[typeFilter]) {
           const res = await fetch(`https://pokeapi.co/api/v2/type/${typeFilter}`);
           const data = await res.json();
@@ -1001,7 +504,6 @@
             .map(p => parseInt(p.pokemon.url.split('/').filter(Boolean).pop()))
             .filter(id => id <= MAX_POKEMON);
         }
-        
         const typeIds = window.typeCache[typeFilter];
         list = list.filter(p => typeIds.includes(p.id));
       }
@@ -1024,11 +526,8 @@
       const grid = document.getElementById('pokemon-grid');
       grid.innerHTML = '';
 
-      if (currentTab === 'all') {
-        await renderNextBatch();
-      } else if (currentTab === 'favs') {
-        renderFavs();
-      }
+      if (currentTab === 'all') await renderNextBatch();
+      else if (currentTab === 'favs') renderFavs();
     }
 
     function createCardHTML(poke) {
@@ -1062,11 +561,8 @@
     }
 
     function toggleFav(id) {
-      if (favorites.includes(id)) {
-        favorites = favorites.filter(favId => favId !== id);
-      } else {
-        favorites.push(id);
-      }
+      if (favorites.includes(id)) favorites = favorites.filter(favId => favId !== id);
+      else favorites.push(id);
       localStorage.setItem('pokelog_favs', JSON.stringify(favorites));
       refreshCurrentView();
     }
@@ -1075,10 +571,7 @@
       if (team.includes(id)) {
         team = team.filter(teamId => teamId !== id);
       } else {
-        if (team.length >= 6) {
-          alert('Seu time já possui 6 Pokémons!');
-          return;
-        }
+        if (team.length >= 6) { alert('Seu time já possui 6 Pokémons!'); return; }
         team.push(id);
       }
       localStorage.setItem('pokelog_team', JSON.stringify(team));
@@ -1086,9 +579,7 @@
       refreshCurrentView();
     }
 
-    function updateTeamBadge() {
-      document.getElementById('team-count').innerText = `${team.length}/6`;
-    }
+    function updateTeamBadge() { document.getElementById('team-count').innerText = `${team.length}/6`; }
 
     function refreshCurrentView() {
       if (currentTab === 'favs') renderFavs();
@@ -1128,8 +619,7 @@
         grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">Nenhum Pokémon favoritado ainda.</p>';
         return;
       }
-      const sortedFavs = [...favorites].sort((a,b) => a - b);
-      for (const id of sortedFavs) {
+      for (const id of [...favorites].sort((a,b) => a - b)) {
         const details = await getPokemonDetails(id);
         grid.appendChild(createCardHTML(details));
       }
@@ -1163,7 +653,7 @@
       }
     }
 
-    /* MODAL & VARIAÇÕES (MEGA & GMAX) */
+    // MODAL DE DETALHES + REGIONAIS / VARIANTES
     async function openModal(id) {
       const poke = await getPokemonDetails(id);
       basePokemonData = poke;
@@ -1172,27 +662,49 @@
       
       currentMegaIndex = -1;
       megaVarieties = [];
-      
       gmaxVariety = null;
       isGmaxActive = false;
+      altVarieties = [];
+
+      const formsSelect = document.getElementById('forms-select');
+      formsSelect.style.display = 'none';
+      formsSelect.innerHTML = '';
 
       try {
         const specRes = await fetch(poke.species.url);
         const specData = await specRes.json();
         
-        const megas = specData.varieties.filter(v => v.pokemon.name.includes('-mega'));
-        if (megas.length > 0) {
-          megaVarieties = megas;
+        // Filtra Megas, Gmax e Outras Formas (Alola, Galar, Hisui, Paldea, Lycanroc Dusk/Midnight, etc.)
+        megaVarieties = specData.varieties.filter(v => v.pokemon.name.includes('-mega'));
+        gmaxVariety = specData.varieties.find(v => v.pokemon.name.includes('-gmax'));
+        
+        altVarieties = specData.varieties.filter(v => 
+          !v.pokemon.name.includes('-mega') && 
+          !v.pokemon.name.includes('-gmax')
+        );
+
+        // Se houver mais de 1 forma alternativa / regional (ex: Lycanroc, Alola, etc.)
+        if (altVarieties.length > 1) {
+          formsSelect.style.display = 'inline-block';
+          altVarieties.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.pokemon.name;
+            opt.innerText = formatFormName(v.pokemon.name, specData.name);
+            formsSelect.appendChild(opt);
+          });
+        }
+
+        // Configura botão Mega
+        if (megaVarieties.length > 0) {
           document.getElementById('mega-toggle').style.display = 'flex';
-          document.getElementById('mega-toggle-text').innerText = 'Mega Evolução';
+          document.getElementById('mega-toggle-text').innerText = 'Mega';
           document.getElementById('mega-toggle').classList.remove('active');
         } else {
           document.getElementById('mega-toggle').style.display = 'none';
         }
 
-        const gmax = specData.varieties.find(v => v.pokemon.name.includes('-gmax'));
-        if (gmax) {
-          gmaxVariety = gmax;
+        // Configura botão G-Max
+        if (gmaxVariety) {
           document.getElementById('gmax-toggle').style.display = 'flex';
           document.getElementById('gmax-toggle').classList.remove('active');
         } else {
@@ -1200,13 +712,33 @@
         }
 
       } catch (e) {
-        document.getElementById('mega-toggle').style.display = 'none';
-        document.getElementById('gmax-toggle').style.display = 'none';
+        console.error("Erro ao carregar variações:", e);
       }
 
       renderModalData();
       document.getElementById('poke-modal').classList.add('open');
       loadEvolutions(poke.id);
+    }
+
+    // Formata o nome da variante para exibição limpa no menu dropdown
+    function formatFormName(fullFormName, baseName) {
+      if (fullFormName === baseName) return 'Forma Padrão';
+      let formSuffix = fullFormName.replace(`${baseName}-`, '');
+      
+      const formLabels = {
+        'alola': 'Alola', 'galar': 'Galar', 'hisui': 'Hisui', 'paldea': 'Paldea',
+        'midnight': 'Midnight (Noite)', 'dusk': 'Dusk (Pôr do Sol)', 'midday': 'Midday (Dia)',
+        'amped': 'Amped', 'low-key': 'Low-Key', 'heat': 'Heat', 'wash': 'Wash',
+        'frost': 'Frost', 'fan': 'Fan', 'mow': 'Mow', 'origin': 'Origin', 'sky': 'Sky'
+      };
+
+      return formLabels[formSuffix] || formSuffix.replace('-', ' ');
+    }
+
+    // Alterna a forma ativa selecionada na modal
+    async function changeForm(pokemonName) {
+      activePokemonData = await getPokemonDetails(pokemonName);
+      renderModalData();
     }
 
     function renderModalData() {
@@ -1224,10 +756,7 @@
       statsContainer.innerHTML = '';
       let totalBst = 0;
 
-      const statNames = {
-        'hp': 'HP', 'attack': 'Ataque', 'defense': 'Defesa',
-        'special-attack': 'Sp. Atk', 'special-defense': 'Sp. Def', 'speed': 'Velocidade'
-      };
+      const statNames = { 'hp': 'HP', 'attack': 'Ataque', 'defense': 'Defesa', 'special-attack': 'Sp. Atk', 'special-defense': 'Sp. Def', 'speed': 'Velocidade' };
 
       poke.stats.forEach(s => {
         totalBst += s.base_stat;
@@ -1257,7 +786,6 @@
 
     async function toggleMega() {
       if (megaVarieties.length === 0) return;
-
       isGmaxActive = false;
       document.getElementById('gmax-toggle').classList.remove('active');
 
@@ -1266,7 +794,7 @@
         currentMegaIndex = -1;
         activePokemonData = basePokemonData;
         document.getElementById('mega-toggle').classList.remove('active');
-        document.getElementById('mega-toggle-text').innerText = 'Mega Evolução';
+        document.getElementById('mega-toggle-text').innerText = 'Mega';
       } else {
         const megaName = megaVarieties[currentMegaIndex].pokemon.name;
         activePokemonData = await getPokemonDetails(megaName);
@@ -1277,16 +805,13 @@
         else if (megaName.endsWith('-y')) label = 'Mega Y';
         document.getElementById('mega-toggle-text').innerText = label;
       }
-
       renderModalData();
     }
 
     async function toggleGmax() {
       if (!gmaxVariety) return;
-
       currentMegaIndex = -1;
       document.getElementById('mega-toggle').classList.remove('active');
-      document.getElementById('mega-toggle-text').innerText = 'Mega Evolução';
 
       isGmaxActive = !isGmaxActive;
 
@@ -1297,7 +822,6 @@
         activePokemonData = basePokemonData;
         document.getElementById('gmax-toggle').classList.remove('active');
       }
-
       renderModalData();
     }
 
@@ -1319,44 +843,30 @@
       document.getElementById('modal-img').src = imgUrl;
     }
 
-    // Função que extrai o texto do método de evolução com suporte detalhado
     function getEvoTriggerText(details) {
       if (!details || details.length === 0) return 'Evolução';
       const evo = details[0];
-
       let condition = '';
 
-      if (evo.min_level) {
-        condition = `Nv. ${evo.min_level}`;
-      } else if (evo.item) {
-        condition = evo.item.name.replace('-', ' ');
-      } else if (evo.trigger && evo.trigger.name === 'trade') {
-        condition = evo.held_item ? `Troca (${evo.held_item.name.replace('-', ' ')})` : 'Troca';
-      } else if (evo.min_happiness) {
-        condition = 'Amizade';
-      } else if (evo.known_move) {
-        condition = evo.known_move.name.replace('-', ' ');
-      } else if (evo.location) {
-        condition = evo.location.name.replace('-', ' ');
-      } else if (evo.trigger) {
-        condition = evo.trigger.name.replace('-', ' ');
-      }
+      if (evo.min_level) condition = `Nv. ${evo.min_level}`;
+      else if (evo.item) condition = evo.item.name.replace('-', ' ');
+      else if (evo.trigger && evo.trigger.name === 'trade') condition = evo.held_item ? `Troca (${evo.held_item.name.replace('-', ' ')})` : 'Troca';
+      else if (evo.min_happiness) condition = 'Amizade';
+      else if (evo.known_move) condition = evo.known_move.name.replace('-', ' ');
+      else if (evo.location) condition = evo.location.name.replace('-', ' ');
+      else if (evo.trigger) condition = evo.trigger.name.replace('-', ' ');
 
-      if (evo.time_of_day) {
-        condition += condition ? ` (${evo.time_of_day})` : evo.time_of_day;
-      }
+      if (evo.time_of_day) condition += condition ? ` (${evo.time_of_day})` : evo.time_of_day;
 
       return condition || 'Evolução';
     }
 
-    // Função recursiva para gerar os nós da árvore evolutiva com todas as ramificações
     async function buildEvoBranch(node) {
       const evoId = node.species.url.split('/').filter(Boolean).pop();
       const evoPoke = await getPokemonDetails(evoId);
       const img = evoPoke.sprites.front_default;
 
       let html = `<div class="evo-node-container">`;
-      
       html += `
         <div class="evo-item" onclick="openModal(${evoId})">
           <img src="${img}" alt="${node.species.name}">
@@ -1387,7 +897,6 @@
       return html;
     }
 
-    // Carrega e renderiza a cadeia evolutiva inteira
     async function loadEvolutions(id) {
       const evoContainer = document.getElementById('modal-evolution');
       evoContainer.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Carregando evoluções...</span>';
@@ -1401,22 +910,17 @@
 
         evoContainer.innerHTML = await buildEvoBranch(evoData.chain);
       } catch (err) {
-        console.error("Erro ao carregar evolução:", err);
         evoContainer.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Linha evolutiva não disponível.</span>';
       }
     }
 
-    function closeModal() {
-      document.getElementById('poke-modal').classList.remove('open');
-    }
+    function closeModal() { document.getElementById('poke-modal').classList.remove('open'); }
 
     function setupInfiniteScroll() {
       window.addEventListener('scroll', () => {
         if (currentTab !== 'all' || isLoadingBatch) return;
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        if (scrollTop + clientHeight >= scrollHeight - 300) {
-          renderNextBatch();
-        }
+        if (scrollTop + clientHeight >= scrollHeight - 300) renderNextBatch();
       });
     }
 
