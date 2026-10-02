@@ -364,7 +364,7 @@
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
       width: 100%;
-      max-width: 550px;
+      max-width: 600px;
       max-height: 90vh;
       border-radius: 20px;
       overflow-y: auto;
@@ -547,14 +547,34 @@
       text-transform: capitalize;
     }
 
+    /* ESTILOS DA CADEIA EVOLUTIVA REFORMULADA (SUPORTE A MULTI-RAMIFICAÇÕES) */
     .evo-chain {
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      gap: 0.5rem;
+      justify-content: center;
       background: rgba(0,0,0,0.2);
-      padding: 1rem;
+      padding: 1.2rem;
       border-radius: 12px;
+      overflow-x: auto;
+      min-height: 120px;
+    }
+
+    .evo-node-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .evo-branches {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .evo-branch-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .evo-item {
@@ -562,17 +582,54 @@
       flex-direction: column;
       align-items: center;
       cursor: pointer;
+      min-width: 65px;
+      padding: 0.4rem;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .evo-item:hover {
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .evo-item img {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
     }
 
     .evo-item span {
       font-size: 0.75rem;
       text-transform: capitalize;
       margin-top: 0.2rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .evo-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.2rem;
+      padding: 0 0.3rem;
+      min-width: 60px;
+    }
+
+    .evo-details {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent-yellow);
+      text-align: center;
+      text-transform: capitalize;
+      white-space: normal;
+      line-height: 1.1;
+      max-width: 80px;
+    }
+
+    .evo-arrow {
+      color: var(--text-muted);
+      font-size: 0.8rem;
     }
 
     /* TEAM DRAWER */
@@ -1262,6 +1319,75 @@
       document.getElementById('modal-img').src = imgUrl;
     }
 
+    // Função que extrai o texto do método de evolução com suporte detalhado
+    function getEvoTriggerText(details) {
+      if (!details || details.length === 0) return 'Evolução';
+      const evo = details[0];
+
+      let condition = '';
+
+      if (evo.min_level) {
+        condition = `Nv. ${evo.min_level}`;
+      } else if (evo.item) {
+        condition = evo.item.name.replace('-', ' ');
+      } else if (evo.trigger && evo.trigger.name === 'trade') {
+        condition = evo.held_item ? `Troca (${evo.held_item.name.replace('-', ' ')})` : 'Troca';
+      } else if (evo.min_happiness) {
+        condition = 'Amizade';
+      } else if (evo.known_move) {
+        condition = evo.known_move.name.replace('-', ' ');
+      } else if (evo.location) {
+        condition = evo.location.name.replace('-', ' ');
+      } else if (evo.trigger) {
+        condition = evo.trigger.name.replace('-', ' ');
+      }
+
+      if (evo.time_of_day) {
+        condition += condition ? ` (${evo.time_of_day})` : evo.time_of_day;
+      }
+
+      return condition || 'Evolução';
+    }
+
+    // Função recursiva para gerar os nós da árvore evolutiva com todas as ramificações
+    async function buildEvoBranch(node) {
+      const evoId = node.species.url.split('/').filter(Boolean).pop();
+      const evoPoke = await getPokemonDetails(evoId);
+      const img = evoPoke.sprites.front_default;
+
+      let html = `<div class="evo-node-container">`;
+      
+      html += `
+        <div class="evo-item" onclick="openModal(${evoId})">
+          <img src="${img}" alt="${node.species.name}">
+          <span>${node.species.name}</span>
+        </div>
+      `;
+
+      if (node.evolves_to && node.evolves_to.length > 0) {
+        html += `<div class="evo-branches">`;
+        for (const subNode of node.evolves_to) {
+          const triggerText = getEvoTriggerText(subNode.evolution_details);
+          const subBranchHTML = await buildEvoBranch(subNode);
+
+          html += `
+            <div class="evo-branch-item">
+              <div class="evo-connector">
+                <span class="evo-details">${triggerText}</span>
+                <i class="fa-solid fa-chevron-right evo-arrow"></i>
+              </div>
+              ${subBranchHTML}
+            </div>
+          `;
+        }
+        html += `</div>`;
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
+    // Carrega e renderiza a cadeia evolutiva inteira
     async function loadEvolutions(id) {
       const evoContainer = document.getElementById('modal-evolution');
       evoContainer.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Carregando evoluções...</span>';
@@ -1273,29 +1399,9 @@
         const evoRes = await fetch(specData.evolution_chain.url);
         const evoData = await evoRes.json();
 
-        evoContainer.innerHTML = '';
-        let chain = evoData.chain;
-
-        while (chain) {
-          const evoId = chain.species.url.split('/').filter(Boolean).pop();
-          const evoPoke = await getPokemonDetails(evoId);
-          const img = evoPoke.sprites.front_default;
-
-          evoContainer.innerHTML += `
-            <div class="evo-item" onclick="openModal(${evoId})">
-              <img src="${img}" alt="${chain.species.name}">
-              <span>${chain.species.name}</span>
-            </div>
-          `;
-
-          if (chain.evolves_to.length > 0) {
-            evoContainer.innerHTML += `<i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:0.8rem;"></i>`;
-            chain = chain.evolves_to[0];
-          } else {
-            chain = null;
-          }
-        }
+        evoContainer.innerHTML = await buildEvoBranch(evoData.chain);
       } catch (err) {
+        console.error("Erro ao carregar evolução:", err);
         evoContainer.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Linha evolutiva não disponível.</span>';
       }
     }
